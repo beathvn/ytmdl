@@ -33,7 +33,8 @@ class SpotifySong(object):
     def __init__(self, song: Dict) -> None:
         self.track_name = song["name"]
         self.release_date = song["album"]["release_date"]
-        self.artist_name = song["artists"][0]["name"]
+        self.artist_name = ', '.join([f['name'] for f in song['artists']])
+        # self.artist_name = song["artists"][0]["name"]
         self.provider = "spotify"
         self.collection_name = song["album"]["name"]
         self.primary_genre_name = ""  # Seems spotify doesn't provide genre
