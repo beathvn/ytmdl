@@ -76,7 +76,17 @@ def progress_handler(d):
         stdout.flush()
 
 
-def dw_using_yt(link, proxy, song_name, datatype, no_progress=False, ytdl_config: str = None, dont_convert: bool = False):
+def dw_using_yt(
+    link,
+    proxy,
+    song_name,
+    datatype,
+    no_progress=False,
+    ytdl_config: str = None,
+    dont_convert: bool = False,
+    cookiefile=None,
+    creds = None
+):
     """
     Download the song using YTDL downloader and use downloader CLI's
     functions to be used to display a progressbar.
@@ -121,6 +131,13 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False, ytdl_config
     if proxy is not None:
         ydl_opts['proxy'] = proxy
 
+    if cookiefile is not None:
+        ydl_opts['cookiefile'] = cookiefile
+    
+    if creds is not None:
+        ydl_opts["username"] = creds.get("username", "")
+        ydl_opts["password"] = creds.get("password", "")
+
     logger.debug("args passed: ", str(ydl_opts))
     ydl = yt_dlp.YoutubeDL(ydl_opts)
 
@@ -139,7 +156,9 @@ def dw(
         datatype='mp3',
         no_progress=False,
         ytdl_config: str = None,
-        dont_convert: bool = False
+        dont_convert: bool = False,
+        cookiefile: str = None,
+        creds = None
 ):
     """
     Download the song.
@@ -173,7 +192,8 @@ def dw(
 
         # Start downloading the song
         status = dw_using_yt(value, proxy, name, datatype,
-                             no_progress, ytdl_config, dont_convert)
+                             no_progress, ytdl_config, dont_convert,
+                             cookiefile, creds)
 
         if status == 0:
             return name
